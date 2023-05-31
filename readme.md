@@ -40,12 +40,17 @@ const f5 = f4.div(f1).toString() // -> "6" (3 / 0.5)
 
 ## API
 
-### `fraq(...args) / Fraction.make(...args)`
+### `Fraction.make(...args: [Fraq] | [number, number])`
 
 Helper function to create fraction from various inputs.
+Also alias available: `fraq`
 
 ```typescript
-fraq(1, 2).toPair() // -> [1, 2]
+type Fraq = Fraction | [number, number] | number | string
+
+Fraction.make(1, 2).toPair() // -> [1, 2]
+fraq(1, 2).toPair() // ALIAS
+
 fraq(2).toPair() // -> [2, 1]
 fraq([2, 1]).toPair() // -> [2, 1]
 fraq(0.5).toPair() // -> [1, 2]
@@ -86,28 +91,28 @@ fraq(Math.PI).limit(1000).toString() // -> "355/113"
 fraq(1.1).limit().toString() // -> "11/10"
 ```
 
-### `.add(b: Fraction | number | [number, number])`
+### `.add(b: Fraq)`
 
 ```typescript
 fraq(1, 2).add([-1, 2]).toString() // -> "0"
 fraq(1, 2).add(1).toString() // -> "3/2"
 ```
 
-### `.sub(b: Fraction | number | [number, number])`
+### `.sub(b: Fraq)`
 
 ```typescript
 fraq(1, 2).sub([1, 2]).toString() // -> "0"
 fraq(1, 2).sub(1).toString() // -> "-1/2"
 ```
 
-### `.mul(b: Fraction | number | [number, number])`
+### `.mul(b: Fraq)`
 
 ```typescript
 fraq(1, 2).mul([1, 2]).toString() // -> "1/4"
 fraq(1, 2).mul(1.5).toString() // -> "3/4"
 ```
 
-### `.div(b: Fraction | number | [number, number])`
+### `.div(b: Fraq)`
 
 ```typescript
 fraq(1, 2).div([1, 2]).toString() // -> "1"
@@ -115,17 +120,17 @@ fraq(1, 2).div(1.5).toString() // -> "1/3"
 fraq(1, 2).div(0).toString() // throws Error
 ```
 
-### `.eq(b: Fraction | number | [number, number])`
+### `.eq(b: Fraq)`
 
 ```typescript
 fraq(1, 2).eq(0.5) // -> true
 fraq(1, 2).eq([1, 3]) // -> false
 ```
 
-### `.lt(b: Fraction | number | [number, number]) -> boolean`
+### `.lt(b: Fraq) -> boolean`
 
-### `.lte(b: Fraction | number | [number, number]) -> boolean`
+### `.lte(b: Fraq) -> boolean`
 
-### `.gt(b: Fraction | number | [number, number]) -> boolean`
+### `.gt(b: Fraq) -> boolean`
 
-### `.gte(b: Fraction | number | [number, number]) -> boolean`
+### `.gte(b: Fraq) -> boolean`

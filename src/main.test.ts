@@ -184,4 +184,62 @@ test("other", () => {
   equal(new Fraction(0, -1).toParts(), { s: 1, c: 0, n: 0, d: 1 })
 })
 
+test("should parse from string", () => {
+  equal(fraq("0").toPair(), [0, 1])
+  equal(fraq("1").toPair(), [1, 1])
+  equal(fraq("2").toPair(), [2, 1])
+
+  equal(fraq("-0").toPair(), [0, 1])
+  equal(fraq("-1").toPair(), [-1, 1])
+  equal(fraq("-2").toPair(), [-2, 1])
+
+  equal(fraq("1/1").toPair(), [1, 1])
+  equal(fraq("1/2").toPair(), [1, 2])
+  equal(fraq("1/3").toPair(), [1, 3])
+  equal(fraq("3/2").toPair(), [3, 2])
+  equal(fraq("3/4").toPair(), [3, 4])
+  equal(fraq("-1/2").toPair(), [-1, 2])
+  equal(fraq("1/-2").toPair(), [-1, 2])
+  throws(() => fraq("1/0").toPair(), /ZeroDivisionError/i)
+
+  equal(fraq("1 1/2").toPair(), [3, 2])
+  equal(fraq("1 1/3").toPair(), [4, 3])
+  equal(fraq("2 1/2").toPair(), [5, 2])
+  equal(fraq("2 1/3").toPair(), [7, 3])
+  equal(fraq("-1 1/2").toPair(), [-3, 2])
+  equal(fraq("-1 -1/2").toPair(), [3, 2])
+  equal(fraq("-1 -1/-2").toPair(), [-3, 2])
+  throws(() => fraq("1 1/0").toPair(), /ZeroDivisionError/i)
+
+  equal(fraq("2 9/3").toPair(), [5, 1])
+  equal(fraq("3 27/9").toPair(), [6, 1])
+
+  equal(fraq("0.5").toPair(), [1, 2])
+  equal(fraq("1.5").toPair(), [3, 2])
+  equal(fraq("-0.5").toPair(), [-1, 2])
+  equal(fraq("-1.5").toPair(), [-3, 2])
+  equal(fraq(".5").toPair(), [1, 2])
+  equal(fraq("-.5").toPair(), [-1, 2])
+  equal(fraq(".0").toPair(), [0, 1])
+  equal(fraq("-.0").toPair(), [0, 1])
+
+  equal(fraq("1.33").toPair(), [133, 100])
+  equal(fraq("1.333").toPair(), [1333, 1000])
+  equal(fraq("1.3333").toPair(), [13333, 10000])
+
+  equal(fraq(" 1/2 ").toPair(), [1, 2])
+  equal(fraq(" 1 1/2 ").toPair(), [3, 2])
+  equal(fraq(" -1/2 ").toPair(), [-1, 2])
+  equal(fraq(" -1 -1/-2 ").toPair(), [-3, 2])
+
+  equal(fraq(" 1 / 2 ").toPair(), [1, 2])
+  equal(fraq(" 1 1 / 2 ").toPair(), [3, 2])
+  equal(fraq("  -1  1  /  -2  ").toPair(), [3, 2])
+
+  throws(() => fraq("1 abc").toPair(), /ValueError/i)
+  throws(() => fraq("1 1/a").toPair(), /ValueError/i)
+  throws(() => fraq("a/1").toPair(), /ValueError/i)
+  throws(() => fraq("1/a").toPair(), /ValueError/i)
+})
+
 test.run()

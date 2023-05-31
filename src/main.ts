@@ -4,7 +4,7 @@
  * https://github.com/python/cpython/blob/3.11/Lib/fractions.py
  */
 
-export type Fraq = Fraction | [number, number] | number
+export type Fraq = Fraction | [number, number] | number | string
 type Parts = { s: 1 | -1; c: Number; n: Number; d: Number }
 
 export const gcd = (a: number, b: number): number => {
@@ -46,7 +46,7 @@ export class Fraction {
     this.d = b / g
   }
 
-  static make(...args: [Fraq] | [number, number]) {
+  static make(...args: [Fraq] | [number, number]): Fraction {
     if (args.length === 2) return new Fraction(...args)
 
     const val = args[0]
@@ -59,6 +59,34 @@ export class Fraction {
       const d = Math.pow(10, r.toString().length)
       const n = (Math.abs(c) * d + r) * Math.sign(val)
       return new Fraction(n, d)
+    }
+
+    if (typeof val === "string") {
+      const m1 = /^([-]?\d+)\s+([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val.trim())
+      if (m1) {
+        const [c, n, d] = m1.slice(1).map((x) => parseInt(x, 10))
+        const s = Math.sign(c) * Math.sign(n) * Math.sign(d)
+
+        const b = Math.abs(d)
+        const a = (Math.abs(c) * b + Math.abs(n)) * s
+        return new Fraction(a, b)
+      }
+
+      const m2 = /^([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val.trim())
+      if (m2) {
+        const [n, d] = m2.slice(1).map((x) => parseInt(x, 10))
+        return new Fraction(n, d)
+      }
+
+      if (/^([-]?\d+)$/.test(val)) {
+        return new Fraction(parseInt(val, 10), 1)
+      }
+
+      if (/^([-]?\d*)\.(\d+)$/.test(val)) {
+        return Fraction.make(parseFloat(val))
+      }
+
+      throw new Error("ValueError")
     }
 
     return new Fraction(...val)

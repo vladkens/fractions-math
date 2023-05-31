@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "fractions-math",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Vlad Pronsky <v.pronsky@gmail.com>",
   "repository": "vladkens/fractions-math",
   "description": "Implementing fractions module from The Python Standard Library on TypeScript",
@@ -26,7 +26,8 @@
     "test-cov": "c8 --include=src yarn test",
     "test-watch": "watchexec -c -e ts 'clear && yarn test'",
     "format": "prettier --write 'src/**/*.ts'",
-    "format-check": "prettier --check 'src/**/*.ts'"
+    "format-check": "prettier --check 'src/**/*.ts'",
+    "ci": "yarn format-check && yarn test-cov && yarn build"
   },
   "dependencies": {},
   "devDependencies": {
