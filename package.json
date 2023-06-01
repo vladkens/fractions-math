@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "fractions-math",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Vlad Pronsky <v.pronsky@gmail.com>",
   "repository": "vladkens/fractions-math",
   "description": "Implementing fractions module from The Python Standard Library on TypeScript",
@@ -9,13 +9,20 @@
   "keywords": [
     "arithmetic",
     "calculations",
+    "convert",
+    "decimal",
+    "format",
+    "fraction",
     "fractions",
+    "imperial",
     "math",
+    "number",
     "numbers",
     "precise",
     "python",
-    "rational numbers",
-    "rational"
+    "rational",
+    "string",
+    "vulgar"
   ],
   "files": [
     "dist"

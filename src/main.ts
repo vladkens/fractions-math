@@ -19,6 +19,10 @@ const UniNumber: Record<string, string> = {
   "7/8": "⅞",
 }
 
+/**
+ * From: https://github.com/lights0123/fractions
+ */
+
 const SupNumber: Record<string, string> = {
   "0": "⁰",
   "1": "¹",
