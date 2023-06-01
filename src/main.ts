@@ -54,7 +54,7 @@ export const fraq = (...args: [Fraq] | [number, number]): Fraction => {
     const d = 10 ** m0[2].length
     const n = (Math.abs(a) * d + b) * s
 
-    return new Fraction(n, d).reduce()
+    return new Fraction(n, d)
   }
 
   const m1 = /^([-]?\d+)\s+([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val)
@@ -77,8 +77,8 @@ export const fraq = (...args: [Fraq] | [number, number]): Fraction => {
 }
 
 export class Fraction {
-  public n: number
-  public d: number
+  public _n: number
+  public _d: number
 
   constructor(n: number, d: number = 1, reduce = false) {
     if (d === 0) throw new Error("ZeroDivisionError")
@@ -88,32 +88,40 @@ export class Fraction {
     const b = a === 0 ? 1 : Math.abs(d)
     const g = reduce ? gcd(a, b) : 1
 
-    this.n = a / g
-    this.d = b / g
+    this._n = a / g
+    this._d = b / g
+  }
+
+  get numerator(): number {
+    return this._n
+  }
+
+  get denominator(): number {
+    return this._d
   }
 
   toString() {
-    return this.d === 1 ? `${this.n}` : `${this.n}/${this.d}`
+    return this._d === 1 ? `${this._n}` : `${this._n}/${this._d}`
   }
 
   toNumber(): number {
-    return this.n / this.d
+    return this._n / this._d
   }
 
   toPair(): [number, number] {
-    return [this.n, this.d]
+    return [this._n, this._d]
   }
 
   reduce() {
-    let g = gcd(this.n, this.d)
-    return new Fraction(this.n / g, this.d / g)
+    let g = gcd(this._n, this._d)
+    return new Fraction(this._n / g, this._d / g)
   }
 
   limit(max: number = 10_000): Fraction {
     max = Math.max(1, Math.ceil(max))
-    if (this.d <= max) return new Fraction(this.n, this.d)
+    if (this._d <= max) return new Fraction(this._n, this._d)
 
-    let [n, d] = [this.n, this.d]
+    let [n, d] = [this._n, this._d]
     let [p0, q0, p1, q1] = [0, 1, 1, 0]
 
     while (true) {
@@ -136,14 +144,14 @@ export class Fraction {
   // math
 
   abs(): Fraction {
-    return new Fraction(Math.abs(this.n), Math.abs(this.d))
+    return new Fraction(Math.abs(this._n), Math.abs(this._d))
   }
 
   add(b: Fraq): Fraction {
     const that = fraq(b)
 
-    let [na, da] = [this.n, this.d]
-    let [nb, db] = [that.n, that.d]
+    let [na, da] = [this._n, this._d]
+    let [nb, db] = [that._n, that._d]
     const g = gcd(da, db)
     if (g === 1) return new Fraction(na * db + da * nb, da * db)
 
@@ -158,8 +166,8 @@ export class Fraction {
   sub(b: Fraq): Fraction {
     const that = fraq(b)
 
-    let [na, da] = [this.n, this.d]
-    let [nb, db] = [that.n, that.d]
+    let [na, da] = [this._n, this._d]
+    let [nb, db] = [that._n, that._d]
     const g = gcd(da, db)
     if (g === 1) return new Fraction(na * db - da * nb, da * db)
 
@@ -174,8 +182,8 @@ export class Fraction {
   mul(b: Fraq): Fraction {
     const that = fraq(b)
 
-    let [na, da] = [this.n, this.d]
-    let [nb, db] = [that.n, that.d]
+    let [na, da] = [this._n, this._d]
+    let [nb, db] = [that._n, that._d]
     const g1 = gcd(na, db)
     if (g1 > 1) {
       na = Math.floor(na / g1)
@@ -194,8 +202,8 @@ export class Fraction {
   div(b: Fraq): Fraction {
     const that = fraq(b)
 
-    let [na, da] = [this.n, this.d]
-    let [nb, db] = [that.n, that.d]
+    let [na, da] = [this._n, this._d]
+    let [nb, db] = [that._n, that._d]
 
     const g1 = gcd(na, nb)
     if (g1 > 1) {
@@ -222,40 +230,40 @@ export class Fraction {
 
   eq(b: Fraq) {
     const that = fraq(b)
-    return this.n * that.d === this.d * that.n
+    return this._n * that._d === this._d * that._n
   }
 
   // a < b
   lt(b: Fraq) {
     const that = fraq(b)
-    return this.n * that.d < this.d * that.n
+    return this._n * that._d < this._d * that._n
   }
 
   // a <= b
   lte(b: Fraq) {
     const that = fraq(b)
-    return this.n * that.d <= this.d * that.n
+    return this._n * that._d <= this._d * that._n
   }
 
   // a > b
   gt(b: Fraq) {
     const that = fraq(b)
-    return this.n * that.d > this.d * that.n
+    return this._n * that._d > this._d * that._n
   }
 
   // a >= b
   gte(b: Fraq) {
     const that = fraq(b)
-    return this.n * that.d >= this.d * that.n
+    return this._n * that._d >= this._d * that._n
   }
 
   // printer
 
   toParts(): Parts {
-    const s = this.n < 0 ? -1 : 1
-    const c = Math.floor(Math.abs(this.n) / this.d)
-    const n = Math.abs(this.n) % this.d
-    const d = this.d
+    const s = this._n < 0 ? -1 : 1
+    const c = Math.floor(Math.abs(this._n) / this._d)
+    const n = Math.abs(this._n) % this._d
+    const d = this._d
     return n === 0 ? { s, c: 0, n: c, d } : { s, c, n, d }
   }
 
