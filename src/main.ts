@@ -1,3 +1,50 @@
+const UniNumber: Record<string, string> = {
+  "1/10": "⅒",
+  "1/2": "½",
+  "1/3": "⅓",
+  "1/4": "¼",
+  "1/5": "⅕",
+  "1/6": "⅙",
+  "1/7": "⅐",
+  "1/8": "⅛",
+  "1/9": "⅑",
+  "2/3": "⅔",
+  "2/5": "⅖",
+  "3/4": "¾",
+  "3/5": "⅗",
+  "3/8": "⅜",
+  "4/5": "⅘",
+  "5/6": "⅚",
+  "5/8": "⅝",
+  "7/8": "⅞",
+}
+
+const SupNumber: Record<string, string> = {
+  "0": "⁰",
+  "1": "¹",
+  "2": "²",
+  "3": "³",
+  "4": "⁴",
+  "5": "⁵",
+  "6": "⁶",
+  "7": "⁷",
+  "8": "⁸",
+  "9": "⁹",
+}
+
+const SubNumber: Record<string, string> = {
+  "0": "₀",
+  "1": "₁",
+  "2": "₂",
+  "3": "₃",
+  "4": "₄",
+  "5": "₅",
+  "6": "₆",
+  "7": "₇",
+  "8": "₈",
+  "9": "₉",
+}
+
 /**
  * Most of this file is rewritten from the Python Standard Library
  * Regards to Sjoerd Mullender & Jeffrey Yasskin
@@ -267,13 +314,30 @@ export class Fraction {
     return n === 0 ? { s, c: 0, n: c, d } : { s, c, n, d }
   }
 
-  toAscii(): string {
-    let t: Fraction
-    t = this.limit(16)
-
-    const p = t.toParts()
+  toAscii(limit = 16): string {
+    let p = this.reduce().limit(limit).toParts()
     if (p.d === 1) return `${p.s * p.n}`
     if (p.c === 0) return `${p.s * p.n}/${p.d}`
     return `${p.s * p.c} ${p.n}/${p.d}`
+  }
+
+  toUnicode(limit = 16): string {
+    let p = this.reduce().limit(limit).toParts()
+    if (p.d === 1) return `${p.s * p.n}`
+
+    let t: string
+    const x = `${p.n}/${p.d}`
+    if (x in UniNumber) t = UniNumber[x]
+    else {
+      // prettier-ignore
+      const nt = p.n.toString().split("").map(c => SupNumber[c]).join("")
+      // prettier-ignore
+      const dt = p.d.toString().split("").map(c => SubNumber[c]).join("")
+
+      t = `${nt}⁄${dt}`
+    }
+
+    const st = p.s === -1 ? "-" : ""
+    return p.c === 0 ? `${st}${t}` : `${st}${p.c}${t}`
   }
 }

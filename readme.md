@@ -137,3 +137,19 @@ fraq(1, 2).eq([1, 3]) // -> false
 ### `.gt(b: Fraq) -> boolean`
 
 ### `.gte(b: Fraq) -> boolean`
+
+### `.toAscii(limit=16)`
+
+```typescript
+fraq(0.5).toUnicode() // -> "1/2"
+fraq(1, 64).toUnicode() // -> "0"
+fraq(1, 64).toUnicode(64) // -> "1/64"
+```
+
+### `.toUnicode()`
+
+```typescript
+fraq(0.5).toUnicode() // -> "½"
+fraq(1, 64).toUnicode() // -> "0"
+fraq(1, 64).toUnicode(64) // -> "¹⁄₆₄"
+```
