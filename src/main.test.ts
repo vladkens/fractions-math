@@ -40,7 +40,6 @@ test("should create fraction", () => {
   throws(() => new Fraction(3.1415, 1), /TypeError/i)
 
   equal(fraq([1, 2]).toPair(), [1, 2])
-  equal(fraq(1, 2).toPair(), [1, 2])
   equal(fraq(2).toPair(), [2, 1])
   equal(fraq(new Fraction(2)).toPair(), [2, 1])
 

@@ -78,12 +78,12 @@ export const gcd = (a: number, b: number): number => {
   return a
 }
 
-export const fraq = (...args: [Fraq] | [number, number]): Fraction => {
-  if (args.length === 2) return new Fraction(...args)
-
-  let val = args[0]
+export const fraq = (val: Fraq): Fraction => {
   if (val instanceof Fraction) return val
-  if (Array.isArray(val)) return new Fraction(...val)
+  if (Array.isArray(val)) {
+    if (val.length !== 2) throw new Error("ValueError")
+    return new Fraction(...val)
+  }
 
   val = val.toString().trim()
 

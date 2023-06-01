@@ -40,17 +40,19 @@ const f5 = f4.div(f1).toString() // -> "6" (3 / 0.5)
 
 ## API
 
-### `fraq(...args: [Fraq] | [number, number])`
+```typescript
+type Fraq = Fraction | [number, number] | number | string
+```
+
+### `fraq(val: Fraq)`
 
 Helper function to create fraction from various inputs.
 
 ```typescript
-type Fraq = Fraction | [number, number] | number | string
-
-fraq(1, 2).toPair() // -> [1, 2]
 fraq(2).toPair() // -> [2, 1]
 fraq([2, 1]).toPair() // -> [2, 1]
 fraq(0.5).toPair() // -> [1, 2]
+fraq("1/2").toPair() // -> [1, 2]
 ```
 
 ### `new Fraction(n: number, d = 1, reduce = false)`
@@ -142,14 +144,14 @@ fraq(1, 2).eq([1, 3]) // -> false
 
 ```typescript
 fraq(0.5).toUnicode() // -> "1/2"
-fraq(1, 64).toUnicode() // -> "0"
-fraq(1, 64).toUnicode(64) // -> "1/64"
+fraq([1, 64]).toUnicode() // -> "0"
+fraq([1, 64]).toUnicode(64) // -> "1/64"
 ```
 
 ### `.toUnicode()`
 
 ```typescript
 fraq(0.5).toUnicode() // -> "½"
-fraq(1, 64).toUnicode() // -> "0"
-fraq(1, 64).toUnicode(64) // -> "¹⁄₆₄"
+fraq([1, 64]).toUnicode() // -> "0"
+fraq([1, 64]).toUnicode(64) // -> "¹⁄₆₄"
 ```
