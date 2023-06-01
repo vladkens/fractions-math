@@ -28,68 +28,68 @@ export const gcd = (a: number, b: number): number => {
 }
 
 export const fraq = (...args: [Fraq] | [number, number]): Fraction => {
-  return Fraction.make(...args)
+  if (args.length === 2) return new Fraction(...args)
+
+  let val = args[0]
+  if (val instanceof Fraction) return val
+  if (Array.isArray(val)) return new Fraction(...val)
+
+  val = val.toString().trim()
+
+  if (/^([-]?\d+)$/.test(val)) {
+    return new Fraction(parseInt(val, 10), 1)
+  }
+
+  const m0 = /^([-]?\d*)\.(\d+)$/.exec(val)
+  if (m0) {
+    const x = parseFloat(val)
+    if (Number.isInteger(x)) return new Fraction(x, 1)
+
+    const [a, b] = x
+      .toString()
+      .split(".")
+      .map((x) => parseInt(x, 10))
+
+    const s = x < 0 ? -1 : 1
+    const d = 10 ** m0[2].length
+    const n = (Math.abs(a) * d + b) * s
+
+    return new Fraction(n, d).reduce()
+  }
+
+  const m1 = /^([-]?\d+)\s+([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val)
+  if (m1) {
+    const [c, n, d] = m1.slice(1).map((x) => parseInt(x, 10))
+    const s = Math.sign(c) * Math.sign(n) * Math.sign(d)
+
+    const b = Math.abs(d)
+    const a = (Math.abs(c) * b + Math.abs(n)) * s
+    return new Fraction(a, b)
+  }
+
+  const m2 = /^([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val)
+  if (m2) {
+    const [n, d] = m2.slice(1).map((x) => parseInt(x, 10))
+    return new Fraction(n, d)
+  }
+
+  throw new Error("ValueError")
 }
 
 export class Fraction {
   public n: number
   public d: number
 
-  constructor(n: number, d: number = 1, reduce = true) {
+  constructor(n: number, d: number = 1, reduce = false) {
     if (d === 0) throw new Error("ZeroDivisionError")
+    if (!Number.isInteger(n) || !Number.isInteger(d)) throw new Error("TypeError")
 
-    let a = Math.abs(n) * (Math.sign(n) * Math.sign(d))
-    let b = n === 0 ? 1 : Math.abs(d)
-    let g = reduce ? gcd(a, b) : 1
+    const a = Math.abs(n) * (Math.sign(n) * Math.sign(d))
+    const b = a === 0 ? 1 : Math.abs(d)
+    const g = reduce ? gcd(a, b) : 1
 
     this.n = a / g
     this.d = b / g
-  }
-
-  static make(...args: [Fraq] | [number, number]): Fraction {
-    if (args.length === 2) return new Fraction(...args)
-
-    const val = args[0]
-    if (val instanceof Fraction) return val
-
-    if (typeof val === "number") {
-      if (Number.isInteger(val)) return new Fraction(val, 1)
-
-      const [c, r] = val.toString().split(".").map(Number)
-      const d = Math.pow(10, r.toString().length)
-      const n = (Math.abs(c) * d + r) * Math.sign(val)
-      return new Fraction(n, d)
-    }
-
-    if (typeof val === "string") {
-      const m1 = /^([-]?\d+)\s+([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val.trim())
-      if (m1) {
-        const [c, n, d] = m1.slice(1).map((x) => parseInt(x, 10))
-        const s = Math.sign(c) * Math.sign(n) * Math.sign(d)
-
-        const b = Math.abs(d)
-        const a = (Math.abs(c) * b + Math.abs(n)) * s
-        return new Fraction(a, b)
-      }
-
-      const m2 = /^([-]?\d+)\s*\/\s*([-]?\d+)$/.exec(val.trim())
-      if (m2) {
-        const [n, d] = m2.slice(1).map((x) => parseInt(x, 10))
-        return new Fraction(n, d)
-      }
-
-      if (/^([-]?\d+)$/.test(val)) {
-        return new Fraction(parseInt(val, 10), 1)
-      }
-
-      if (/^([-]?\d*)\.(\d+)$/.test(val)) {
-        return Fraction.make(parseFloat(val))
-      }
-
-      throw new Error("ValueError")
-    }
-
-    return new Fraction(...val)
   }
 
   toString() {
@@ -102,6 +102,11 @@ export class Fraction {
 
   toPair(): [number, number] {
     return [this.n, this.d]
+  }
+
+  reduce() {
+    let g = gcd(this.n, this.d)
+    return new Fraction(this.n / g, this.d / g)
   }
 
   limit(max: number = 10_000): Fraction {
@@ -256,7 +261,7 @@ export class Fraction {
 
   toAscii(): string {
     let t: Fraction
-    t = this.limit(10)
+    t = this.limit(16)
 
     const p = t.toParts()
     if (p.d === 1) return `${p.s * p.n}`

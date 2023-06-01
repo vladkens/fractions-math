@@ -40,31 +40,28 @@ const f5 = f4.div(f1).toString() // -> "6" (3 / 0.5)
 
 ## API
 
-### `Fraction.make(...args: [Fraq] | [number, number])`
+### `fraq(...args: [Fraq] | [number, number])`
 
 Helper function to create fraction from various inputs.
-Also alias available: `fraq`
 
 ```typescript
 type Fraq = Fraction | [number, number] | number | string
 
-Fraction.make(1, 2).toPair() // -> [1, 2]
-fraq(1, 2).toPair() // ALIAS
-
+fraq(1, 2).toPair() // -> [1, 2]
 fraq(2).toPair() // -> [2, 1]
 fraq([2, 1]).toPair() // -> [2, 1]
 fraq(0.5).toPair() // -> [1, 2]
 ```
 
-### `new Fraction(n: number, d = 1, reduce = true)`
+### `new Fraction(n: number, d = 1, reduce = false)`
 
 Creates a fraction taking two numbers – numenator and denominator. Denominator has default value `1`. By default, the fraction is reduced to the minimum form.
 
 ```typescript
 new Fraction(1, 2).toPair() // -> [1, 2]
 new Fraction(2).toPair() // -> [2, 1]
-new Fraction(5, 10).toPair() // -> [1, 2]
-new Fraction(5, 10, false).toPair() // -> [5, 10]
+new Fraction(5, 10).toPair() // -> [5, 10]
+new Fraction(5, 10, true).toPair() // -> [1, 2]
 ```
 
 ### `.toString()`
@@ -80,6 +77,12 @@ fraq(1, -2).toString() // -> "-1/2"
 
 ```typescript
 fraq(1, 2).toString() // -> 0.5
+```
+
+### `.reduce()`
+
+```typescript
+fraq(5, 10).reduce().toPair() // -> [1, 2]
 ```
 
 ### `.limit(max: number = 10_000)`
