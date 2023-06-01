@@ -127,6 +127,14 @@ export const fraq = (val: Fraq): Fraction => {
   throw new Error("ValueError")
 }
 
+export const fraqOrNull = (val: Fraq): Fraction | null => {
+  try {
+    return fraq(val)
+  } catch (e) {
+    return null
+  }
+}
+
 export class Fraction {
   public _n: number
   public _d: number
