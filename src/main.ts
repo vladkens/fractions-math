@@ -5,7 +5,7 @@
  */
 
 export type Fraq = Fraction | [number, number] | number | string
-type Parts = { s: 1 | -1; c: Number; n: Number; d: Number }
+type Parts = { s: 1 | -1; c: number; n: number; d: number }
 
 export const gcd = (a: number, b: number): number => {
   if (!Number.isInteger(a) || !Number.isInteger(b)) {
