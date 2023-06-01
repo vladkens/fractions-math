@@ -104,14 +104,6 @@ export class Fraction {
     return [this.n, this.d]
   }
 
-  toParts(): Parts {
-    const s = this.n < 0 ? -1 : 1
-    const c = Math.floor(Math.abs(this.n) / this.d)
-    const n = Math.abs(this.n) % this.d
-    const d = this.d
-    return n === 0 ? { s, c: 0, n: c, d } : { s, c, n, d }
-  }
-
   limit(max: number = 10_000): Fraction {
     max = Math.max(1, Math.ceil(max))
     if (this.d <= max) return new Fraction(this.n, this.d)
@@ -250,5 +242,25 @@ export class Fraction {
   gte(b: Fraq) {
     const that = fraq(b)
     return this.n * that.d >= this.d * that.n
+  }
+
+  // printer
+
+  toParts(): Parts {
+    const s = this.n < 0 ? -1 : 1
+    const c = Math.floor(Math.abs(this.n) / this.d)
+    const n = Math.abs(this.n) % this.d
+    const d = this.d
+    return n === 0 ? { s, c: 0, n: c, d } : { s, c, n, d }
+  }
+
+  toAscii(): string {
+    let t: Fraction
+    t = this.limit(10)
+
+    const p = t.toParts()
+    if (p.d === 1) return `${p.s * p.n}`
+    if (p.c === 0) return `${p.s * p.n}/${p.d}`
+    return `${p.s * p.c} ${p.n}/${p.d}`
   }
 }
