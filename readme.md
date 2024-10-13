@@ -1,26 +1,22 @@
 # fractions-math
 
 <div align="center">
-  <a href="https://npmjs.org/package/fractions-math">
-    <img src="https://badgen.net/npm/v/fractions-math" alt="version" />
-  </a>
-  <a href="https://github.com/vladkens/fractions-math/actions">
-    <img src="https://github.com/vladkens/fractions-math/workflows/test/badge.svg" alt="test status" />
-  </a>
-  <a href="https://packagephobia.now.sh/result?p=fractions-math">
-    <img src="https://badgen.net/packagephobia/publish/fractions-math" alt="size" />
-  </a>
-  <a href="https://npmjs.org/package/fractions-math">
-    <img src="https://badgen.net/npm/dm/fractions-math" alt="downloads" />
-  </a>
-  <a href="https://github.com/vladkens/fractions-math/blob/main/LICENSE">
-    <img src="https://badgen.net/github/license/vladkens/fractions-math" alt="license" />
-  </a>
+
+[<img src="https://badgen.net/npm/v/fractions-math" alt="version" />](https://npmjs.org/package/fractions-math)
+[<img src="https://badgen.net/packagephobia/publish/fractions-math" alt="size" />](https://packagephobia.now.sh/result?p=fractions-math)
+[<img src="https://badgen.net/npm/dm/fractions-math" alt="downloads" />](https://npmjs.org/package/fractions-math)
+[<img src="https://badgen.net/github/license/vladkens/fractions-math" alt="license" />](https://github.com/vladkens/fractions-math/blob/main/LICENSE)
+[<img src="https://badgen.net/static/-/buy%20me%20a%20coffee/ff813f?icon=buymeacoffee&label" alt="donate" />](https://buymeacoffee.com/vladkens)
+
 </div>
 
 Implementing [`fractions`](https://docs.python.org/3/library/fractions.html) module from The Python Standard Library on TypeScript.
 
 ## Install
+
+```sh
+npm i fractions-math
+```
 
 ```sh
 yarn add fractions-math
